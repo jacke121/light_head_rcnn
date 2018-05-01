@@ -226,7 +226,7 @@ def make_parser():
         '-d', '--devices', default='0', type=str, help='device for testing')
     parser.add_argument(
         '--show_image', '-s', default=False, action='store_true')
-    parser.add_argument('--start_epoch', '-se', default=1, type=int)
+    parser.add_argument('--start_epoch', '-se', default=26, type=int)
     parser.add_argument('--end_epoch', '-ee', default=-1, type=int)
     return parser
 

@@ -130,21 +130,25 @@ def eval_all(args):
         if nr_devs == 1:
             func, inputs = load_model(model_file, devs[0])
             for record in records:
-                data_dict = read_func(record)
-                result_dict = inference(func, inputs, data_dict)
-                all_results.append(result_dict)
+                import datetime
+                for i in range(50):
+                    data_dict = read_func(record)
+                    time_old=datetime.datetime.now()
+                    result_dict = inference(func, inputs, data_dict)
+                    print("requests",(datetime.datetime.now()-time_old).microseconds)
+                    all_results.append(result_dict)
 
-                if args.show_image:
-                    image = result_dict['data']
-                    for db in result_dict['result_boxes']:
-                        if db.score > config.test_vis_threshold:
-                            db.draw(image)
-                    if 'boxes' in result_dict.keys():
-                        for db in result_dict['boxes']:
-                            db.draw(image)
-                    cv2.imwrite('/tmp/hehe.png', image)
-                    # cv2.imshow('image', image)
-                    # cv2.waitKey(0)
+                    if args.show_image:
+                        image = result_dict['data']
+                        for db in result_dict['result_boxes']:
+                            if db.score > config.test_vis_threshold:
+                                db.draw(image)
+                        if 'boxes' in result_dict.keys():
+                            for db in result_dict['boxes']:
+                                db.draw(image)
+                        cv2.imwrite('./tmp/hehe.png', image)
+                        cv2.imshow('image', image)
+                        cv2.waitKey(0)
                 pbar.update(1)
         else:
             nr_image = math.ceil(nr_records / nr_devs)
@@ -226,7 +230,7 @@ def make_parser():
         '-d', '--devices', default='0', type=str, help='device for testing')
     parser.add_argument(
         '--show_image', '-s', default=False, action='store_true')
-    parser.add_argument('--start_epoch', '-se', default=1, type=int)
+    parser.add_argument('--start_epoch', '-se', default=26, type=int)
     parser.add_argument('--end_epoch', '-ee', default=-1, type=int)
     return parser
 
